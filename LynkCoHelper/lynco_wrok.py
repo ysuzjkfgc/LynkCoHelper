@@ -35,7 +35,7 @@ class lynco_wrok(threading.Thread):
         # 先进行登录（不需要缓存RefreshToken进行刷新操作，每次执行都是用登录接口皆可，后续可以根据实际情况进行缓存优化）
         response = self.lynkco_app_request.login(self.account['username'], self.AES.encrypt(self.account['password']))
         if response['code'] != 'success':
-            print("APP端操作用户：" + self.account['username'] + "失败，登录失败" + time.strftime('%Y-%m-%d %H:%M:%S'))
+            print("APP端操作用户：" + self.account['username'] + "失败，登录失败 " + time.strftime('%Y-%m-%d %H:%M:%S'))
             return False
         self.userinfo = response['data']
 

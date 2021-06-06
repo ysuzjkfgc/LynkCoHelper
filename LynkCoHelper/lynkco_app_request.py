@@ -31,3 +31,15 @@ class lynkco_app_request():
         headers = { 'token': token }
         response = requests.post(self.__host + '/app/v1/task/reporting', params = params, data = {}, auth = self.__lynco_api_auth, proxies = {}, headers = headers);
         return response.json()
+
+    def get_vcode_by_regist(self, mobile):
+        """获取短信（注册时）"""
+        params = { 'mobile': mobile }
+        response = requests.get(self.__host + '/auth/register/sendSms', params = params, data = {}, auth = self.__lynco_api_auth, proxies = {});
+        return response.json()
+
+    def regist(self, mobile, password, vcode):
+        """注册接口"""
+        params = { 'mobile': mobile, 'password': password, 'passwordConfirm': password, 'verificationCode': vcode }
+        response = requests.post(self.__host + '/auth/register/registerByMobile', params = params, data = {}, auth = self.__lynco_api_auth, proxies = {});
+        return response.json()

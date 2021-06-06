@@ -41,9 +41,11 @@
     <Compile Include="com\uestcit\api\__init__.py" />
     <Compile Include="com\uestcit\__init__.py" />
     <Compile Include="com\__init__.py" />
+    <Compile Include="lynco_regist_wrok.py" />
     <Compile Include="lynco_wrok.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="sms_request.py" />
     <Compile Include="lynkco_helper.py" />
     <Compile Include="lynkco_app_request.py">
       <SubType>Code</SubType>
