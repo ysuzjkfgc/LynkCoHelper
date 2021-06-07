@@ -21,7 +21,6 @@ class lynco_wrok(threading.Thread):
         self.app_secret = base64.b64decode(self.config['api_geteway']['app_secret']).decode('utf-8')
         # 缓存AESKEY(因为存储的是两次base64后的值，所以需要base64解码两次)
         self.aes_key = base64.b64decode(base64.b64decode(self.config['aes_key']).decode('utf-8')).decode('utf-8')
-        self.AES = AES(self.aes_key)
         self.lynkco_app_request = lynkco_app_request(self.app_key, self.app_secret)
         
     def run(self):
@@ -32,13 +31,28 @@ class lynco_wrok(threading.Thread):
 
     def app_action(self):
         """App端操作流程"""
+        self.AES = AES(self.aes_key)
         # 先进行登录（不需要缓存RefreshToken进行刷新操作，每次执行都是用登录接口皆可，后续可以根据实际情况进行缓存优化）
         response = self.lynkco_app_request.login(self.account['username'], self.AES.encrypt(self.account['password']))
         if response['code'] != 'success':
-            print("APP端操作用户：" + self.account['username'] + "失败，登录失败" + time.strftime('%Y-%m-%d %H:%M:%S'))
+            print("APP端操作用户：" + self.account['username'] + "失败，登录失败 " + time.strftime('%Y-%m-%d %H:%M:%S'))
             return False
         self.userinfo = response['data']
 
+        self.token = self.userinfo['centerTokenDto']['token']
+        self.userid = self.userinfo['centerUserInfoDto']['id']
+        # self.article_like()
+
+        self.share()
+
+        print("APP端操作用户：" + self.account['username'] + "完成" + time.strftime('%Y-%m-%d %H:%M:%S'))
+        return True
+
+    def article_like(self):
+        response = self.lynkco_app_request.member_info(self.userinfo['centerTokenDto']['token'], '2573800983633199454', True)
+
+    def share(self):
+        """分享得Co币"""
         # 先获取用户信息，打印用户余额
         response = self.lynkco_app_request.member_info(self.userinfo['centerTokenDto']['token'], self.userinfo['centerUserInfoDto']['id'])
         if response['code'] != 'success':
@@ -60,6 +74,3 @@ class lynco_wrok(threading.Thread):
         else:
             self.member_info = response['data']
             print("APP端操作后用户：" + self.account['username'] + "当前Co币余额为：" + self.member_info['point'] + " " + time.strftime('%Y-%m-%d %H:%M:%S'))
-
-        print("APP端操作用户：" + self.account['username'] + "完成" + time.strftime('%Y-%m-%d %H:%M:%S'))
-        return True

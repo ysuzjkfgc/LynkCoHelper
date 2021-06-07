@@ -3,5 +3,12 @@
   "api_geteway": {
     "app_key": "MjAzNzYwNDE2",
     "app_secret": "ZTFtc2w5YXFkMTAxZ2ZjanBvODczaHJzNWpnNzUyb2c="
+  },
+  "sms_platform": {
+    "enable": 0,
+    "count": 0,
+    "project_id": "0",
+    "username": "0",
+    "password": "0"
   }
 }
